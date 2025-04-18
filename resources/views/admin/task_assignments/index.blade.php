@@ -38,7 +38,7 @@
                 <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td>{{ $assignment->user->firstName }} {{ $assignment->user->lastName }}</td>
-                    <td>{{ $assignment->subtask->title }}</td>
+                    <td>{{ $assignment->subtask->title }} ({{ $assignment->subtask->max }} - {{ $assignment->subtask->min }})</td>
                     <td>{{ $assignment->rating }}</td>
                     {{-- <td>{{ $assignment->rating }}</td> --}}
                     <td>{{ $assignment->addDate }}</td>

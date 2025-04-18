@@ -4,7 +4,7 @@
 <div class=" mt-5">
     <h3 class="mb-4">{{ $user->firstName }} {{ $user->lastName }}-({{ $user->position }})</h3>
 
-    <canvas id="kpiChart" height="100"></canvas>
+    <canvas id="kpiChart" height="170"></canvas>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -50,52 +50,53 @@
 
     const ctx = document.getElementById('kpiChart').getContext('2d');
     const chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: kpiData.map(x => x.month),
-            datasets: datasets
-        },
-        options: {
-            responsive: true,
-            scales: {
-                x: {
-                    stacked: true
-                },
-                y: {
-                    stacked: true,
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Ballar'
-                    }
+    type: 'bar',
+    data: {
+        labels: kpiData.map(x => x.month),
+        datasets: datasets
+    },
+    options: {
+        indexAxis: 'y', // <-- bu qatorni qo‘shish kifoya
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Ballar'
                 }
             },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const value = context.raw;
-                            const index = context.dataIndex;
-                            const item = kpiData[index];
-                            const totalWithBonus = item.total_with_bonus;
+            y: {
+                stacked: true
+            }
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const value = context.raw;
+                        const index = context.dataIndex;
+                        const item = kpiData[index];
+                        const totalWithBonus = item.total_with_bonus;
 
-                            // KPI ga bo‘lgan foiz hisoblash
-                            let contribution = 0;
-                            if (totalWithBonus > 0 && item.kpi > 0) {
-                                contribution = ((value / totalWithBonus) * item.kpi).toFixed(2);
-                            }
-
-                            return `${context.dataset.label}: ${value} (${contribution}% of KPI)`;
-                        },
-                        footer: function(context) {
-                            const index = context[0].dataIndex;
-                            const item = kpiData[index];
-                            return 'KPI: ' + item.kpi + '%';
+                        let contribution = 0;
+                        if (totalWithBonus > 0 && item.kpi > 0) {
+                            contribution = ((value / totalWithBonus) * item.kpi).toFixed(2);
                         }
+
+                        return `${context.dataset.label}: ${value} (${contribution}% of KPI)`;
+                    },
+                    footer: function(context) {
+                        const index = context[0].dataIndex;
+                        const item = kpiData[index];
+                        return 'KPI: ' + item.kpi + '%';
                     }
                 }
             }
         }
-    });
+    }
+});
+
 </script>
 @endsection

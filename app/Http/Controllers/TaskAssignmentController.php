@@ -28,7 +28,6 @@ class TaskAssignmentController extends Controller
     public function index(): View
     {
         $assignments = TaskAssignment::with(['subtask', 'user'])->latest()->get();
-
         return view('admin.task_assignments.index', [
             'assignments' => $assignments
         ]);
